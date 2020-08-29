@@ -1,10 +1,27 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, flash, url_for, redirect, session
 from database import project_schema, user_schema, projects
 import time
 
 # import utils
 
 app = Flask(__name__)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] not in user or request.form['password'] not in user['username']:
+            error = 'The username or the password is incorrect. Please try again. '
+        else:
+            #Straight to the dashboard.html page. 
+            return redirect(url_for('dashboard'))   
+       
+    return render_template('app.js', error=error)
+
+@app.route('/Log out')
+def logout():
+    flash("You were logged out")
+    return redirect(url_for('app.js'))
 
 @app.route("/process", methods=['POST'])
 def match_preference():
@@ -31,7 +48,7 @@ def update_preferences():
     current_preferences.append(pref_name)
     # RUN SORT
     if pref_ticked and len(current_preferences) == 1: # Just add projects
-        # Search projects list for one with corresponding preference tag
+        # Search projects list for one with corresponding preference t
         for project in projects:
             if project[]
 
